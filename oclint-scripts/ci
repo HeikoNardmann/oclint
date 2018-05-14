@@ -20,6 +20,8 @@ arg_parser.add_argument('-archive', '--archive', action="store_true")
 arg_parser.add_argument('-j', type=int, default=0)
 args = arg_parser.parse_args()
 
+use_countly = False
+
 def upload_snapshot():
     process.call('python upload')
 
@@ -42,7 +44,7 @@ if args.setup:
     process.call('python clang co -branch ' + args.llvm_branch)
     process.call('python countly co')
     if args.release:
-        process.call('python clang build -release -clean' + process.j_flag(args.j))
+        process.call('python clang build -release -clean -no-analytics' + process.j_flag(args.j))
     else:
         process.call('python googleTest co')
         process.call('python clang build -clean' + process.j_flag(args.j))
@@ -50,7 +52,7 @@ if args.setup:
     process.call('python countly build' + process.j_flag(args.j))
 
 if args.release:
-    process.call('python build -clean -release' + process.j_flag(args.j))
+    process.call('python build -clean -release -no-analytics' + process.j_flag(args.j))
 else:
     process.call('python test -clean' + process.j_flag(args.j))
     process.call('python build -clean' + process.j_flag(args.j))
